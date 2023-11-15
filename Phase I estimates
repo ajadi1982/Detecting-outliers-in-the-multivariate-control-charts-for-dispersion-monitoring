@@ -1,0 +1,30 @@
+library(MASS); 
+library(mvtnorm)
+library(rrcov)
+
+fPhaseI_estimates=function(m,n,p,theta,magnitude,estimator){
+ mu=rep(0,p)
+ SIG=diag(p)
+ COV=MU=0
+ for(i in 1:m){
+  x  <- rmvnorm(n,mu,SIG)
+  df1=matrix(as.numeric(runif(n*p) < theta),c(n,p));
+  df=magnitude*matrix(rchisq(n*p,1),c(n,p));
+  x1=x+(df1*df);
+  if(estimator=="COV"){
+   muvhat <- colMeans(x1)
+   sigmamhat <- cov(x1)
+  }else if(estimator=="MVE"){
+   Mve=CovMve(x1)
+   muvhat <- Mve$center
+   sigmamhat <- Mve$cov
+  }else if(estimator=="MCD"){
+   Mcd=cov.mcd(x1)
+   muvhat <- Mcd$center
+   sigmamhat <- Mcd$cov
+  }
+  COV=COV+sigmamhat
+  MU=MU+muvhat
+ }
+ return(list(COV=COV/m,MU=MU/m))
+}
