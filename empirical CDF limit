@@ -1,0 +1,31 @@
+require(mvtnorm)
+require(expm)
+
+p=3
+n=8
+SIG=diag(p)
+mu=rep(0,p)
+simno=10000000
+diagS=rep(0,simno)
+ChartType="PC1"
+
+for(i in 1:simno){
+ y=rmvnorm(n,mu,SIG)
+ S=cov(y)
+ SVD=svd(S)
+ logShat=t(SVD$u%*%diag(log(SVD$d)))%*%SVD$v
+ if(ChartType=="PC1"){
+  diagS[i]=sum(diag(logShat))
+ }else if(ChartType=="GPC"){
+  diagS[i]=det(logShat)
+ }
+}
+
+if(ChartType=="PC1"){
+ filename = paste("Control_Limit_LogCovM_p_",p, "_n_",n,".rds", sep="")
+}else if(ChartType=="GPC"){
+ filename = paste("det_Control_Limit_LogCovM_p_",p, "_n_",n,".rds", sep="")
+}
+saveRDS(diagS, filename)
+
+ 
