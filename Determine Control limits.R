@@ -3,7 +3,6 @@ require(expm)
 library(glasso)
 library(magic)
 library(rrcov)
-setwd("C:/Users/jimoh.ajadi/OneDrive - KFUPM/Desktop/Research/Dr. Ishaq/New Version-April")
 source("Phase I estimates.R")
 
 fGCL=function(n,p,h){
@@ -144,7 +143,7 @@ fARLMultCharts=function(p,n,m,mu,sig,Rho,simno,ChartType,L){
   LCL=quantile(qtl,L/2)
  }else if(ChartType=="GPC"){
   if(p==3){
-   qtl=readRDS("det_Control_Limit_LogCovM_p_3_n_8.Rds")
+   qtl=readRDS("det_Control_Limit_LogCovM_p_3_n_8.Rds") #can be determined by the file name "empirical CDF limit".
   }else if(p==5){
    qtl=readRDS("det_Control_Limit_LogCovM_p_5_n_10.Rds")
   }else if(p==10){
